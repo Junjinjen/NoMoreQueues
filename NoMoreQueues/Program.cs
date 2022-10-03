@@ -49,17 +49,9 @@ namespace NoMoreQueues
             while (process.IsRunning())
             {
                 WindowManager.ActivateWindow(process);
-                var game = WindowManager.GetWindowScreenshot(process);
-                var clickPositions = ClickableButtons.Select(x => game.ContainsImage(x)).Where(x => x.HasValue).Select(x => x.Value.Center()).ToList();
-                foreach (var position in clickPositions)
-                {
-                    Input.SetCursorPosition(position);
-                    Thread.Sleep(PressDelay);
-                    Input.SendKeysPress(PressDelay, Key.LeftMouseButton);
-                    Thread.Sleep(PressDelay);
-                }
+                ClickButtons(process);
 
-                if (stopwatch.ElapsedMilliseconds >= nextDelay)
+                if (stopwatch.ElapsedMilliseconds >= nextDelay && process.IsRunning())
                 {
                     nextDelay = GetRandomChangedValue(MovementDelay, MovementChangePercent, Random);
                     Input.SendKeysPress(PressDelay, MovementKeys.PickRandom(Random));
@@ -67,6 +59,21 @@ namespace NoMoreQueues
                 }
 
                 Thread.Sleep(LoopDelay);
+            }
+
+            Console.WriteLine("Wow process finished");
+        }
+
+        private static void ClickButtons(Process process)
+        {
+            var game = WindowManager.GetWindowScreenshot(process);
+            var clickPositions = ClickableButtons.Select(x => game.ContainsImage(x)).Where(x => x.HasValue).Select(x => x.Value.Center()).ToList();
+            foreach (var position in clickPositions)
+            {
+                Input.SetCursorPosition(position);
+                Thread.Sleep(PressDelay);
+                Input.SendKeysPress(PressDelay, Key.LeftMouseButton);
+                Thread.Sleep(PressDelay);
             }
         }
 
