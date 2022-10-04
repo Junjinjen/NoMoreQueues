@@ -15,7 +15,7 @@ namespace NoMoreQueues
         private const int LoopDelay = 5000;
         private const int PressDelay = 300;
         private const int MovementDelay = 180000;
-        private const int MovementChangePercent = 10;
+        private const int MovementChangePercent = 30;
 
         private static readonly Random Random = new();
         private static readonly Size PrimaryDisplaySize = WindowManager.GetPrimaryDisplaySize();
@@ -30,6 +30,10 @@ namespace NoMoreQueues
         private static readonly List<Bitmap> ClickableButtons = new()
         {
             LoadImage("EnterWorld.png"),
+            LoadImage("DarkPortal.png"),
+            LoadImage("DarkPortal_Active.png"),
+            LoadImage("Bloodrage.png"),
+            LoadImage("Bloodrage_Active.png"),
         };
 
         public static void Main(string[] args)
