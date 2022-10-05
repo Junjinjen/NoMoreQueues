@@ -12,7 +12,7 @@ namespace NoMoreQueues
     public static class Program
     {
         private const string WowProcessName = "WowClassic";
-        private const int LoopDelay = 5000;
+        private const int LoopDelay = 3000;
         private const int PressDelay = 300;
         private const int MovementDelay = 180000;
         private const int MovementChangePercent = 30;
@@ -30,10 +30,10 @@ namespace NoMoreQueues
         private static readonly List<Bitmap> ClickableButtons = new()
         {
             LoadImage("EnterWorld.png"),
-            LoadImage("DarkPortal.png"),
-            LoadImage("DarkPortal_Active.png"),
-            LoadImage("Bloodrage.png"),
-            LoadImage("Bloodrage_Active.png"),
+            LoadImage("Reconnect.png"),
+            LoadImage("Reconnect_Active.png"),
+            LoadImage("Okay.png"),
+            LoadImage("Okay_Active.png"),
         };
 
         public static void Main(string[] args)
@@ -70,14 +70,20 @@ namespace NoMoreQueues
 
         private static void ClickButtons(Process process)
         {
-            var game = WindowManager.GetWindowScreenshot(process);
-            var clickPositions = ClickableButtons.Select(x => game.ContainsImage(x)).Where(x => x.HasValue).Select(x => x.Value.Center()).ToList();
-            foreach (var position in clickPositions)
+            var buttonsExists = true;
+            while (buttonsExists)
             {
-                Input.SetCursorPosition(position);
-                Thread.Sleep(PressDelay);
-                Input.SendKeysPress(PressDelay, Key.LeftMouseButton);
-                Thread.Sleep(PressDelay);
+                var game = WindowManager.GetWindowScreenshot(process);
+                var clickPositions = ClickableButtons.Select(x => game.ContainsImage(x)).Where(x => x.HasValue).Select(x => x.Value.Center()).ToList();
+                foreach (var position in clickPositions)
+                {
+                    Input.SetCursorPosition(position);
+                    Thread.Sleep(PressDelay);
+                    Input.SendKeysPress(PressDelay, Key.LeftMouseButton);
+                    Thread.Sleep(PressDelay);
+                }
+
+                buttonsExists = clickPositions.Any();
             }
         }
 
